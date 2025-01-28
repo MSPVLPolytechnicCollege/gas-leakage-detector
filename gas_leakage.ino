@@ -35,13 +35,13 @@ void loop()
   lcd.print ("Scanning GAS");
   lcd.setCursor(0,1);
   lcd.print("Gas Level: ");
-  lcd.print(data);
+  lcd.println(data);
   delay(1000);
  
   if ( data > 500) // The gas level above 500
   {
     SendMessage();
-    Serial.print("Gas detection alarm");
+    Serial.println("Gas detection alarm");
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Gas Level Exceed");
@@ -59,7 +59,7 @@ void loop()
 
   else // The gas level below 500
   {
-    Serial.print("Gas Level Low");
+    Serial.println("Gas Level Low");
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Gas Level Normal");
