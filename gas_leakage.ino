@@ -74,13 +74,40 @@ lcd.clear();
  
 void SendMessage() 
 {
+  // List of phone numbers you want to send the SMS 
+  String phoneNumbers[] = {
+    "+91xxxxxxxxxx",  // First phone number
+    "+91yyyyyyyyyy",  // Second phone number
+    "+91zzzzzzzzzz",  // Third phone number
+    // Add more numbers here as needed
+  };
+
+  // Message to send
+  String message = "Warning Excess Gas Detected!!";
+
   Serial.println("SMS sending");
-  mySerial.println("AT+CMGF=1"); // Set the gas module in text mode
-  delay(1000); 
-  mySerial.println("AT+CMGS=\"+91900xxxxxxx\"\r"); 
-  delay(1000);
-  mySerial.println("Excess Gas Detected!!");
-  delay(100);
-  mySerial.println((char)26);
-  delay(1000);
+
+  // Loop through each phone number and send the SMS
+  for (int i = 0; i < sizeof(phoneNumbers) / sizeof(phoneNumbers[0]); i++) {
+    String phoneNumber = phoneNumbers[i];
+    Serial.print("Sending SMS to: ");
+    Serial.println(phoneNumber);
+
+    // Set the GSM module to text mode
+    mySerial.println("AT+CMGF=1");
+    
+    // Set the recipient phone number
+    mySerial.print("AT+CMGS=\"");
+    mySerial.print(phoneNumber);     // Phone number
+    mySerial.println("\"");
+
+    // Send the message text
+    mySerial.println(message);
+
+    // Send Ctrl+Z (ASCII code 26) to indicate the end of the message and send it
+    mySerial.write(26); // Ctrl+Z character to send the message
+    delay(1000);  // Wait a bit to ensure message is sent
+  }
+
+  Serial.println("All SMS messages sent.");
 }
