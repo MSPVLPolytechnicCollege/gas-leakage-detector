@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas Level Leakage Monitoring System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script>
+        function fetchData() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    let level = data.gas_level;
+                    document.getElementById('gas-level').innerText = level + "%";
+                    document.querySelector('.gas-level').style.height = level + "%";
+
+                    let bar = document.querySelector('.gas-level');
+                    if (level < 200) {
+                        bar.style.background = "#28a745";
+                    } else if (level < 500) {
+                        bar.style.background = "#ffc107";
+                    } else {
+                        bar.style.background = "#dc3545";
+                    }
+
+                    let table = document.getElementById("history-table");
+                    let row = table.insertRow(1);
+                    let timeCell = row.insertCell(0);
+                    let levelCell = row.insertCell(1);
+                    let now = new Date().toLocaleTimeString();
+                    timeCell.innerText = now;
+                    levelCell.innerText = level + "%";
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        setInterval(fetchData, 1000);
+    </script>
+</head>
+<body>
+    <div class="header">🚀 Gas Level Leakage Monitoring System 🚨</div>
+    <div class="container">
+        <div class="left-panel">
+            <h3>📊 Gas Level History</h3>
+            <table id="history-table">
+                <tr>
+                    <th>Time</th>
+                    <th>Gas Level</th>
+                </tr>
+            </table>
+        </div>
+        <div class="center-panel">
+            <h2>📈 Gas Level Monitor</h2>
+            <p id="gas-level">Waiting for data...</p>
+            <div class="gas-container">
+                <div class="gas-level"></div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <h3>ℹ️ <b>About This Project</b></h3>
+            <p>This system monitors gas levels in real-time and provides alerts when levels are too high.</p>
+            <b>⚡ Features:</b>
+            <ul>
+                <li>📡 Live gas level monitoring</li>
+                <li>🛑 Color-coded danger alerts</li>
+                <li>📩 Email & SMS notifications</li>
+            </ul>
+            <b>📖 User Manual:</b>
+            <ol>
+                <li>🔌 Connect the gas sensor to your system.</li>
+                <li>▶ Start the server and open this page.</li>
+                <li>📊 Monitor gas levels in real-time.</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
