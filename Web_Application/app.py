@@ -1,4 +1,6 @@
 import serial.tools.list_ports
+import os
+import serial
 from flask import Flask, jsonify, render_template
 from twilio.rest import Client
 
@@ -22,7 +24,7 @@ def get_data():
                 data = ser.readline().decode('utf-8', errors='ignore').strip()
                 if int(data)>500:
                   account_sid = 'AC373075ae0c58d81c230f007a6cb35ee9'
-                  auth_token = '6f915b93c946705089a4c138d38aadc9'
+                  auth_token = 'ece278bff3e94b7a1d8055d0ba7acaa5'
                   client = Client(account_sid, auth_token)
 
                   message = client.messages.create(
